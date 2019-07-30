@@ -1,0 +1,33 @@
+﻿<Window x:Class="WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF"
+        xmlns:xbim="http://schemas.Xbim.com/Presentation"
+        mc:Ignorable="d" Title="MainWindow" Height="450" Width="800">
+
+    <Grid  Name="MainFrame">
+        <!--<Grid.Resources>
+            <ObjectDataProvider x:Key="ModelProvider"  ObjectType="{x:Type local:IfcstoreClass}"   MethodName="IfcStoreMethod"></ObjectDataProvider>
+        </Grid.Resources>-->
+        <Grid.DataContext>
+            <local:IfcstoreClass />
+        </Grid.DataContext>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Button Content="打开单一文件" x:Name="button"  Grid.Row="1" VerticalAlignment="Center" Click="Button_Click" Margin="242,5,436,6"/>
+        <xbim:DrawingControl3D  Grid.Row="0"  x:Name="DrawingControl"  Focusable="True"  Width="Auto"  Height="Auto"  Model ="{Binding Path=ModelStore}" >
+            <!--Model ="{Binding Source={StaticResource ModelProvider}}"-->
+            <xbim:DrawingControl3D.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFB9B1B1" Offset="1"/>
+                    <GradientStop Color="#FFFAF8FF"/>
+                </LinearGradientBrush>
+            </xbim:DrawingControl3D.Background>
+        </xbim:DrawingControl3D>
+        <Button Content="打开多个文件" Margin="467,5,207,0" Grid.Row="1" VerticalAlignment="Top" Click="Button_Click_1"/>
+    </Grid>
+</Window>
