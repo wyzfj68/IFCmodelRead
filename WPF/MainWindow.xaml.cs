@@ -22,6 +22,7 @@ using Xbim.IO.Xml.BsConf;
 using Xbim.ModelGeometry.Scene;
 using Xbim.Presentation;
 using Xbim.Presentation.FederatedModel;
+using System.ComponentModel;
 
 namespace WPF
 {
@@ -37,7 +38,7 @@ namespace WPF
             InitializeComponent();
             IfcStore.ModelProviderFactory.UseHeuristicModelProvider();
         }
-
+        
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog();
@@ -67,7 +68,8 @@ namespace WPF
                     MessageBox.Show(geomEx.ToString());
                 }
             }
-            DrawingControl.Model = model;
+            //DrawingControl.Model = model;
+            ModelStore = model;
         }
         
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -76,7 +78,8 @@ namespace WPF
             IfcStore store= FederationFromDialogbox(files);
             ModelStore = store;
             MessageBox.Show("数据加载完毕");
-            this.DrawingControl.Model = store;     //赋值
+            //this.DrawingControl.Model = store;     // 控件model属性赋值
+            
             //DrawingControl.ReloadModel(DrawingControl3D.ModelRefreshOptions.None);
         }
         private string[] OpenFiles()
@@ -177,17 +180,54 @@ namespace WPF
     }
 
 
-
-    public class IfcstoreClass
+    //[TypeConverter(typeof(StringToIfcStoreConverter))]
+    public class IfcstoreClass : INotifyPropertyChanged
     {
-        public IfcStore ModelStore { get; set; }
-        private IfcStore IfcStoreMethod()
+        //public IfcStore ModelStore { get; set; }
+
+        private IModel _ModelStore;
+        public IModel ModelStore
+        {
+            get => _ModelStore;
+            set
+            {
+                if (_ModelStore != value)
+                {
+                    _ModelStore = value;
+                    RaisePropertyChanged(nameof(ModelStore));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        
+        public IfcStore IfcStoreMethod()
         {
             string[] files = new string[2] { "C:\\Users\\lenovo-wanchi\\Desktop\\rvt17.ifc", "C:\\Users\\lenovo-wanchi\\Desktop\\site.ifc" };
             IfcStore store = MainWindow.FederationFromDialogbox(files);
             return store;
         }
     }
+
+    //public class StringToIfcStoreConverter : TypeConverter
+    //{
+    //    public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+    //    {
+    //        if (value =="ifcstore")
+    //        {
+    //            IfcstoreClass ifc = new IfcstoreClass();
+    //            ifc.ModelStore = ifc.IfcStoreMethod();
+    //            return ifc;
+    //        }
+
+    //        return base.ConvertFrom(context, culture, value);
+    //    }
+    //}
 
 
 

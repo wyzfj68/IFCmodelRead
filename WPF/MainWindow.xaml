@@ -12,14 +12,14 @@
             <ObjectDataProvider x:Key="ModelProvider"  ObjectType="{x:Type local:IfcstoreClass}"   MethodName="IfcStoreMethod"></ObjectDataProvider>
         </Grid.Resources>-->
         <Grid.DataContext>
-            <local:IfcstoreClass />
+            <local:IfcstoreClass  ModelStore="" />
         </Grid.DataContext>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Button Content="打开单一文件" x:Name="button"  Grid.Row="1" VerticalAlignment="Center" Click="Button_Click" Margin="242,5,436,6"/>
-        <xbim:DrawingControl3D  Grid.Row="0"  x:Name="DrawingControl"  Focusable="True"  Width="Auto"  Height="Auto"  Model ="{Binding Path=ModelStore}" >
+        <xbim:DrawingControl3D   Model ="{Binding Path=ModelStore}" Grid.Row="0"  x:Name="DrawingControl"  Focusable="True"  Width="Auto"  Height="Auto"   >
             <!--Model ="{Binding Source={StaticResource ModelProvider}}"-->
             <xbim:DrawingControl3D.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
