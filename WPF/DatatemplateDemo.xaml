@@ -1,0 +1,46 @@
+﻿<Window x:Class="WPF.DatatemplateDemo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF"
+        mc:Ignorable="d"
+        xmlns:xbim="http://schemas.Xbim.com/Presentation"
+        Title="DatatemplateDemo" Height="500" Width="1000">
+    <Window.Resources>
+        <DataTemplate x:Key="datatemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Button Content="{Binding Path=Title}" x:Name="button"  Grid.Row="1" VerticalAlignment="Center" Height="20" Width="100"/>
+
+                <xbim:DrawingControl3D   Model ="{Binding Path=ModelStore}" Grid.Row="0" Focusable="True"  Width="Auto"  Height="Auto"   >
+                    <xbim:DrawingControl3D.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                            <GradientStop Color="#FFB9B1B1" Offset="1"/>
+                            <GradientStop Color="#FFFAF8FF"/>
+                        </LinearGradientBrush>
+                    </xbim:DrawingControl3D.Background>
+                </xbim:DrawingControl3D>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <UserControl ContentTemplate="{StaticResource datatemplate}" x:Name="usercontrol" Grid.Column="0"></UserControl>
+        <xbim:DrawingControl3D   Model ="{Binding Path=ModelStore}" Grid.Column="2" Focusable="True"  Width="Auto"  Height="Auto"  >
+            <xbim:DrawingControl3D.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFB9B1B1" Offset="1"/>
+                    <GradientStop Color="#FFFAF8FF"/>
+                </LinearGradientBrush>
+            </xbim:DrawingControl3D.Background>
+        </xbim:DrawingControl3D>
+    </Grid>
+</Window>

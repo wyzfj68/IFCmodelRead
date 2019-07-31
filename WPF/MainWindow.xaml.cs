@@ -26,16 +26,44 @@ using System.ComponentModel;
 
 namespace WPF
 {
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
+    public class MainViewModel : INotifyPropertyChanged
+    {
+        private IfcStore _modelStore;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public string Title { get; } = "Hello one file";
+
+        public IfcStore ModelStore
+        {
+            get
+            {
+                return _modelStore;
+            }
+            set
+            {
+                if (value != _modelStore)
+                {
+                    _modelStore = value;
+                    NotifyPropertyChanged(nameof(ModelStore));
+                }
+            }
+        }
+    }
+
     public partial class MainWindow : Window
     {
-        public IfcStore ModelStore { get; set; }
+        private readonly MainViewModel _viewModel = new MainViewModel();
 
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = _viewModel;
             IfcStore.ModelProviderFactory.UseHeuristicModelProvider();
         }
         
@@ -49,9 +77,9 @@ namespace WPF
 
         private  void LoadIFCFile(string dlgFileName)
         {
-            var currentIfcStore = DrawingControl.Model as IfcStore;
-            currentIfcStore?.Dispose();
-            DrawingControl.Model = null;
+            //var currentIfcStore = DrawingControl.Model as IfcStore;
+            //currentIfcStore?.Dispose();
+            //DrawingControl.Model = null;
             var model = IfcStore.Open(dlgFileName);
             if (model.GeometryStore.IsEmpty)
             {
@@ -69,14 +97,14 @@ namespace WPF
                 }
             }
             //DrawingControl.Model = model;
-            ModelStore = model;
+            _viewModel.ModelStore = model;
         }
         
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             var files = OpenFiles();
             IfcStore store= FederationFromDialogbox(files);
-            ModelStore = store;
+            _viewModel.ModelStore = store;
             MessageBox.Show("数据加载完毕");
             //this.DrawingControl.Model = store;     // 控件model属性赋值
             
